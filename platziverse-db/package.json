@@ -1,0 +1,23 @@
+{
+  "name": "platziverse-db",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - DB Module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TalkySafe143/platziverse.git"
+  },
+  "author": "Sebastian Galindo <sebastian.galindo143@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TalkySafe143/platziverse/issues"
+  },
+  "homepage": "https://github.com/TalkySafe143/platziverse#readme",
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
+}
