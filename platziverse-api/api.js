@@ -10,7 +10,7 @@ const config = require('./config')
 let services, Agent, Metric
 
 router.use('*', async (req, res, next) => {
-    debug('Connecting to database')
+  debug('Connecting to database')
   if (!services) {
     try {
       services = await db(config.db)
@@ -27,11 +27,11 @@ router.get('/agents', async (req, res, next) => {
   debug('A request come from /agents')
 
   let agents = []
-    try {
-        agents = await Agent.findConnected()
-    } catch (e) {
-        next(e)
-    }
+  try {
+    agents = await Agent.findConnected()
+  } catch (e) {
+    next(e)
+  }
 
   res.json({ agents })
 })
@@ -39,18 +39,18 @@ router.get('/agents', async (req, res, next) => {
 router.get('/agent/:uuid', async (req, res, next) => {
   const { uuid } = req.params
 
-    debug('Request to /agent/uuid')
+  debug('Request to /agent/uuid')
 
-    let agent
-    try {
-        agent = await Agent.findByUuid(uuid)
-    } catch(e) {
-        next(e)
-    }
+  let agent
+  try {
+    agent = await Agent.findByUuid(uuid)
+  } catch (e) {
+    next(e)
+  }
 
-    if(!agent) {
-        next(boom.badRequest(`Agent not found with Uuid: ${uuid}`))
-    }
+  if (!agent) {
+    next(boom.badRequest(`Agent not found with Uuid: ${uuid}`))
+  }
 
   res.json({ agent })
 })
@@ -63,12 +63,12 @@ router.get('/metrics/:uuid', async (req, res, next) => {
   let metrics = []
   try {
     metrics = await Metric.findByAgentUuid(uuid)
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 
   if (metrics.length === 0 || !metrics) {
-      next(boom.badData('That Agent does not have metrics'))
+    next(boom.badData('That Agent does not have metrics'))
   }
 
   res.json({ metrics })
@@ -83,7 +83,7 @@ router.get('/metrics/:uuid/:type', async (req, res, next) => {
 
   try {
     metrics = await Metric.findByTypeAgentUuid(type, uuid)
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 
