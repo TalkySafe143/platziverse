@@ -34,7 +34,7 @@ app.use((err, req, res, next) => {
     err = boom.badImplementation()
   }
 
-  return res.status(err.output.statusCode).json({
+  res.status(err.output.statusCode).json({
     error: err.output.payload
   })
 })

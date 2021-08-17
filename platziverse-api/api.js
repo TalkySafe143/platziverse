@@ -30,7 +30,7 @@ router.get('/agents', async (req, res, next) => {
   try {
     agents = await Agent.findConnected()
   } catch (e) {
-    next(e)
+    return next(e)
   }
 
   res.json({ agents })
@@ -45,11 +45,11 @@ router.get('/agent/:uuid', async (req, res, next) => {
   try {
     agent = await Agent.findByUuid(uuid)
   } catch (e) {
-    next(e)
+    return next(e)
   }
 
   if (!agent) {
-    next(boom.badRequest(`Agent not found with Uuid: ${uuid}`))
+    return next(boom.badRequest(`Agent not found with Uuid: ${uuid}`))
   }
 
   res.json({ agent })
@@ -62,13 +62,13 @@ router.get('/metrics/:uuid', async (req, res, next) => {
 
   let metrics = []
   try {
-    metrics = await Metric.findByAgentUuid(uuid)
+    metrics = await Metric.findByAgentUuid(parseInt(uuid))
   } catch (e) {
-    next(e)
+    return next(e)
   }
 
-  if (metrics.length === 0 || !metrics) {
-    next(boom.badData('That Agent does not have metrics'))
+  if (!metrics) {
+    return next(boom.badData('That Agent does not have metrics'))
   }
 
   res.json({ metrics })
@@ -84,11 +84,11 @@ router.get('/metrics/:uuid/:type', async (req, res, next) => {
   try {
     metrics = await Metric.findByTypeAgentUuid(type, uuid)
   } catch (e) {
-    next(e)
+    return next(e)
   }
 
   if (!metrics || metrics.length === 0) {
-    next(boom.badData('That Agent does not have metrics with that type!'))
+    return next(boom.badData('That Agent does not have metrics with that type!'))
   }
 
   res.json({ metrics })
