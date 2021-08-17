@@ -4,20 +4,28 @@ const test = require('ava')
 const supertest = require('supertest')
 const sinon = require('sinon')
 const proxyquire = require('proxyquire')
+const util = require('util')
+const config = require('../config')
 
 const agentMock = require('./fixtures/agent')
 const metricMock = require('./fixtures/metric')
+
+const auth = require('../auth')
+const sign = util.promisify(auth.sign)
 
 let sandbox = null
 let server = null
 let dbStub = null
 let AgentStub = {}
 let MetricStub = {}
+let token = null
 
 let uuid = 'yyy-yyy-yyy'
 let id = 1
 
 test.beforeEach(async () => {
+    token = await sign({ admin: true, username: 'platzi', permissions: ['metrics:read'] }, config.auth.secret)
+
     sandbox = sinon.createSandbox()
     dbStub = sandbox.stub()
     dbStub.returns(Promise.resolve({
@@ -33,8 +41,8 @@ test.beforeEach(async () => {
     AgentStub.findByUuid.withArgs('yyysaodikajsd').returns(Promise.resolve(null))
 
     MetricStub.findByAgentUuid = sandbox.stub()
-    MetricStub.findByAgentUuid.withArgs(id).returns(Promise.resolve([metricMock.byAgentId(id)]))
-    MetricStub.findByAgentUuid.withArgs(100).returns(Promise.resolve(null))
+    MetricStub.findByAgentUuid.withArgs(`${id}`).returns(Promise.resolve([metricMock.byAgentId(id)]))
+    MetricStub.findByAgentUuid.withArgs('100').returns(Promise.resolve(null))
 
     MetricStub.findByTypeAgentUuid = sandbox.stub()
     MetricStub.findByTypeAgentUuid.withArgs('cpu', '1').returns(Promise.resolve([metricMock.byType('cpu')]))
@@ -56,6 +64,7 @@ test.afterEach(() => {
 test.serial.cb('/api/agents', t => {
   supertest(server)
     .get('/api/agents')
+    .set("Authorization", `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -99,6 +108,7 @@ test.serial.cb('/api/agent/:uuid - not found', t => {
 test.serial.cb('/api/metrics/:uuid - not found', t => {
     supertest(server)
         .get(`/api/metrics/100`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(422)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -118,6 +128,7 @@ test.serial.cb('/api/metrics/:uuid - not found', t => {
 test.serial.cb('/api/metrics/:uuid', t => {
     supertest(server)
         .get(`/api/metrics/${id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {

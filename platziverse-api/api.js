@@ -5,6 +5,9 @@ const debug = require('debug')('platziverse:api:routes')
 const router = require('express').Router()
 const db = require('platziverse-db')
 
+const expressJwt = require('express-jwt')
+const guard = require('express-jwt-permissions')()
+
 const config = require('./config')
 
 let services, Agent, Metric
@@ -23,12 +26,22 @@ router.use('*', async (req, res, next) => {
   next()
 })
 
-router.get('/agents', async (req, res, next) => {
+router.get('/agents',expressJwt(config.auth) ,async (req, res, next) => {
   debug('A request come from /agents')
+
+  const { user } = req
+
+  if (!user || !user.username) {
+    return next(boom.unauthorized())
+  }
 
   let agents = []
   try {
-    agents = await Agent.findConnected()
+
+    user.admin ?
+    agents = await Agent.findConnected() :
+    agents = await Agent.findByUsername(user.username);
+
   } catch (e) {
     return next(e)
   }
@@ -55,14 +68,14 @@ router.get('/agent/:uuid', async (req, res, next) => {
   res.json({ agent })
 })
 
-router.get('/metrics/:uuid', async (req, res, next) => {
+router.get('/metrics/:uuid',expressJwt(config.auth), guard.check(['metrics:read']) ,async (req, res, next) => {
   const { uuid } = req.params
 
   debug('Request to /metrics/uuid')
 
   let metrics = []
   try {
-    metrics = await Metric.findByAgentUuid(parseInt(uuid))
+    metrics = await Metric.findByAgentUuid(uuid)
   } catch (e) {
     return next(e)
   }
