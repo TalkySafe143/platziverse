@@ -23,7 +23,7 @@ const metrics = [
 module.exports = {
   single: metric,
   all: metrics,
-  byType: type => metrics.find(metric => metric.type == 'type'),
+  byType: type => metrics.find(metric => metric.type == type),
   byId: id => metrics.find(metric => metric.id === id),
   byAgentId: id => metrics.find(metric => metric.agentId === id)
 }
