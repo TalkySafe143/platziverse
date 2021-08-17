@@ -9,9 +9,8 @@ const routerApi = require('./api')
 const boom = require('@hapi/boom')
 
 const handleFatalError = err => {
-    console.log(`${chalk.red('[fatal error]')} ${err.message}`)
-    console.log(err.stack)
-    process.exit(1)
+  console.log(`${chalk.red('[fatal error]')} ${err.message}`)
+  console.log(err.stack)
 }
 
 const port = process.env.PORT || 3000
@@ -22,31 +21,32 @@ app.use('/api', routerApi)
 
 // Not found
 app.use((req, res) => {
-    const { output: error } = boom.notFound('Lo siento, esta ruta no ha sido implementada')
+  const { output: error } = boom.notFound('Lo siento, esta ruta no ha sido implementada')
 
-    return res.status(error.statusCode).json(error.payload)
+  return res.status(error.statusCode).json(error.payload)
 })
 
 // Express error handler
 app.use((err, req, res, next) => {
-    debug(`Error: ${err.message}`)
+  debug(`Error: ${err.message}`)
 
-    if (!boom.isBoom(err)) {
-        err = boom.badImplementation()
-    }
+  if (!boom.isBoom(err)) {
+    err = boom.badImplementation()
+  }
 
-    return res.status(err.output.statusCode).json({
-        error: err.output.payload
-    })
+  return res.status(err.output.statusCode).json({
+    error: err.output.payload
+  })
 })
 
-if (!require.main) {
-    process.on('uncaughtException', handleFatalError)
-    process.on('unhandledRejection', handleFatalError)
+if (!module.parent) {
+  process.on('uncaughtException', handleFatalError)
+  process.on('unhandledRejection', handleFatalError)
 
-    server.listen(port, () => {
+  server.listen(port, () => {
     console.log(`${chalk.green('[platziverse-api]')} server listening on port: ${port}`)
-    })
+  })
+} else {
+  console.log('Hola, me estoy exportando y no estoy en el server:)')
+  module.exports = server
 }
-
-module.exports = server
