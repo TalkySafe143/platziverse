@@ -37,7 +37,7 @@ router.get('/agent/:uuid', async (req, res, next) => {
     }
 })
 
-router.get('/metrics/:uuid', (req, res, next) => {
+router.get('/metrics/:uuid', async (req, res, next) => {
     const { uuid } = req.params
 
     try {
@@ -53,7 +53,7 @@ router.get('/metrics/:uuid', (req, res, next) => {
     }
 })
 
-router.get('/metrics/:uuid/:type', (req, res, next) => {
+router.get('/metrics/:uuid/:type', async (req, res, next) => {
     const { uuid, type } = req.params
 
     try {
