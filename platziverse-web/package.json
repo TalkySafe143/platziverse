@@ -1,0 +1,35 @@
+{
+  "name": "platziverse-web",
+  "version": "1.0.0",
+  "description": "A simple IoT platform - Web Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "start:dev": "cross-env DEBUG=platziverse:* nodemon server.js",
+    "lint": "standard --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TalkySafe143/platziverse.git"
+  },
+  "author": "Sebastian Galindo <sebastian.galindo143@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TalkySafe143/platziverse/issues"
+  },
+  "homepage": "https://github.com/TalkySafe143/platziverse#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.12",
+    "standard": "^16.0.3"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.2",
+    "cross-env": "^7.0.3",
+    "debug": "^4.3.2",
+    "express": "^4.17.1",
+    "platziverse-agent": "file:../platziverse-agent",
+    "socket.io": "^4.1.3"
+  }
+}
