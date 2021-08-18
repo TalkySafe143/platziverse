@@ -93,8 +93,10 @@ class PlatziverseAgent extends EventEmitter {
         let broadcast = false
         switch (topic) {
           case 'agent/connected':
+            broadcast = true
             break
           case 'agent/disconnected':
+            broadcast = true
             break
           case 'agent/message':
             broadcast = payload && payload.agent && payload.agent.uuid !== this._agentId
@@ -114,7 +116,7 @@ class PlatziverseAgent extends EventEmitter {
     if (this._started) {
       clearInterval(this._timer)
       this._started = false
-      this.emit('disconnected', this._agentId)
+      this.emit('agent/disconnected', this._agentId)
       this._client.end()
     }
   }
