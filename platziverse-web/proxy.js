@@ -25,13 +25,14 @@ router.get('/agent/:uuid', async (req, res, next) => {
     const { uuid } = req.params
 
     try {
-        const {} = await axios({
+        const { data, status } = await axios({
             'method': 'GET',
             'url': `${config.endpoint}/api/agent/${uuid}`,
             'headers': {
                 'Authorization': `Bearer ${config.apiToken}`
             }
         })
+        res.status(status).json(data)
     } catch(e) {
         return next(e)
     }
@@ -41,13 +42,14 @@ router.get('/metrics/:uuid', async (req, res, next) => {
     const { uuid } = req.params
 
     try {
-        const {} = await axios({
+        const { data, status } = await axios({
             'method': 'GET',
             'url': `${config.endpoint}/api/metrics/${uuid}`,
             'headers': {
                 'Authorization': `Bearer ${config.apiToken}`
             }
         })
+        res.status(status).json(data)
     } catch(e) {
         return next(e)
     }
@@ -57,13 +59,14 @@ router.get('/metrics/:uuid/:type', async (req, res, next) => {
     const { uuid, type } = req.params
 
     try {
-        const {} = await axios({
+        const { data, status } = await axios({
             'method': 'GET',
             'url': `${config.endpoint}/api/metrics/${uuid}/${type}`,
             'headers': {
                 'Authorization': `Bearer ${config.apiToken}`
             }
         })
+        res.status(status).json(data)
     } catch(e) {
         return next(e)
     }
