@@ -1,0 +1,27 @@
+{
+  "name": "platziverse-cli",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "A simple IoT platform - CLI",
+  "bin": "platziverse.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TalkySafe143/platziverse.git"
+  },
+  "author": "Sebastian Galindo <sebastian.galindo143@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TalkySafe143/platziverse/issues"
+  },
+  "homepage": "https://github.com/TalkySafe143/platziverse#readme",
+  "devDependencies": {
+    "standard": "^16.0.3"
+  },
+  "dependencies": {
+    "args": "^5.0.1",
+    "minimist": "^1.2.5"
+  }
+}
