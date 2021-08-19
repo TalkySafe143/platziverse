@@ -15,7 +15,6 @@ const utils = require('./utils')
 const handleFatalError = err => {
   console.log(`${chalk.red('[fatal error]')} ${err.message}`)
   console.log(err.stack)
-  process.exit(1)
 }
 
 const handleError = err => {
@@ -149,7 +148,6 @@ app.on('publish', async (packet, client) => {
 app.on('clientError', (client, error) => {
   console.log(`${chalk.red('[fatal error]')} ${error.message}`)
   console.log(error.stack)
-  process.exit(1)
 })
 
 process.on('uncaughtException', handleFatalError)
