@@ -8,7 +8,6 @@ function pipe (source, target) {
   const emit = source._emit = source.emit
 
   source.emit = function () {
-    console.log('Estamos emitiendo mensajes estos son los params', arguments)
     emit.apply(source, arguments)
     target.emit.apply(target, arguments)
 
